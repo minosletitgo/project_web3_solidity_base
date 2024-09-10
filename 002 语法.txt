@@ -1,0 +1,2 @@
+Solid       | adj   |   坚硬的，可靠的
+Solidity    | n     |   硬度，可靠性
