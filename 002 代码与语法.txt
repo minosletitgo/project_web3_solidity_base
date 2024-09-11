@@ -47,7 +47,7 @@ pragma solidity ^0.7.0 || ^0.8.0;       多个版本范围
 --布尔型（bool）
 --整数型（int 和 uint）
 --地址型（address）（20 字节）
---字节型（bytes1 到 bytes32）（1个字节 到 32个字节）
+--定长字节型（bytes1 到 bytes32）（1个字节 到 32个字节）
 --枚举型（enum）（起始值 0）
 
 整数类型细说：
@@ -71,8 +71,35 @@ int(建议复习一下计算机的补码原理)
 --20个字节 = 8*20位个二进制数 = 8*20/4位个二进制数 = 40位个十六进制数
 --如，0x1234567890123456789012345678901234567890，十六进制表达方式，即40个值
 
-
+定长字节型细说：
+bytes32 public _byte32 = "MiniSolidity";
+--"MiniSolidity"的长度是11个字符。每个字符在UTF-8编码中占用1个字节，所以总长度是11字节。
+--"MiniSolidity" + 21个零字节
+--4d696e69536f6c69646974790000000000000000000000000000000000000000
 
 
 引用类型（Reference Types）：
+--动态大小的字节数组（bytes）
+--字符串（string）
+--数组（array）：固定长度数组（Fixed-size Arrays）、动态长度数组（Dynamic-size Arrays）
+--结构体（struct）
+--映射（mapping）
+--合约（contract）
 
+动态大小的字节数组细说：
+--bytes是一个更通用的动态字节数组，可以存储任意字节数据。
+--bytes dynamicBytes = "Hello, Solidity!";
+
+字符串细说：
+--string是bytes的一个子类型
+--string 是一种动态长度的 Unicode(UTF-8编码) 字符串，用于存储文本数据。
+--string 是 bytes 的一个特殊形式，专门用于处理文本。
+--string message = "Hello, Solidity!";
+
+数组类型细说：
+--uint[3] fixedSizeArray = [1, 2, 3];
+--uint[] dynamicArray; dynamicArray.push(1); dynamicArray.push(2); dynamicArray.push(3);
+
+映射（mapping）类型细说：
+--不支持迭代或获取键的集合，只能通过键快速访问值
+--主键可以是值类型（如 uint、address 等），而值可以是任意类型，包括引用类型。
