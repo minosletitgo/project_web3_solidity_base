@@ -129,4 +129,27 @@ storage：存储在链上
 memory：存储在内存中
 calldata：存储在内存中(一般修饰函数的参数，但不可更改它)
 
+函数形式：
+    function foo() public {
+        //Nothing
+    }
+
+    function foo() public pure {
+        //Nothing
+    }
+
+    function foo() public pure returns(uint) {
+        return 1;
+    }
+
+    function foo() public pure returns(uint ret) {
+        ret = 1;
+    }
+
+    function foo() public pure returns(uint ret) {
+        return  1;
+    }        
+
+
+
 
