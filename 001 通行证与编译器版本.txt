@@ -1,0 +1,32 @@
+// SPDX-License-Identifier: MIT
+--Massachusetts Institute of Technology, 简称MIT
+--开源许可证，但它要求保留版权声明和许可证声明，
+--它是Github上使用率最高的许可证
+--它最初由麻省理工学院开发和使用
+
+// SPDX-License-Identifier: Unlicense
+--许可证表示代码没有任何版权限制，任何人都可以自由使用
+
+// SPDX-License-Identifier: Apache-2.0
+--一个宽松的开源许可证，允许用户自由使用、修改和分发软件，同时提供了对贡献者的保护。
+--它要求对源代码的修改和分发包括原始许可证和版权声明，以及任何修改的说明。Apache 2.0 也提供了专利权利的保障。
+
+// SPDX-License-Identifier: GPL-2.0-or-later
+--一种强制开源许可证，要求所有基于 GPL 许可的软件修改版和衍生版也必须以 GPL 许可证发布。
+--or-later 表示该软件也可以在 GPL 的任何后续版本下发布。
+
+// SPDX-License-Identifier: GPL-3.0-or-later
+--相比于 GPL-2.0，它在版权和专利方面提供了更多的保护。
+--or-later 表示该软件也可以在 GPL 的任何后续版本下发布。
+
+选择和使用 SPDX 标识符的原因
+--明确许可证要求: 使用 SPDX 标识符可以清晰地表明代码的许可证类型，有助于避免法律纠纷和合规问题。
+--自动化工具: SPDX 标识符支持工具和自动化流程（如许可证合规扫描），帮助开发人员更容易管理和维护代码库中的许可证信息。
+--项目标准: 在开源项目中，明确的许可证声明是良好的实践，有助于社区理解和遵守许可证条款。
+
+指定编译器版本的指令
+pragma solidity 0.8.0;                  精确版本
+pragma solidity >=0.8.0 <0.9.0;         版本范围
+pragma solidity ^0.8.0;                 向后兼容的版本(等价于上一条)
+pragma solidity >=0.0.0;                任意版本(不推荐)
+pragma solidity ^0.7.0 || ^0.8.0;       多个版本范围

@@ -1,0 +1,157 @@
+值类型（Value Types）完全统计：
+--布尔型（bool）
+--整数型（int 和 uint）
+--地址型（address）（20 字节）
+--定长字节型（bytes1 到 bytes32）（1个字节 到 32个字节）
+--枚举型（enum）（起始值 0）
+
+引用类型（Reference Types）完全统计：
+--动态大小的字节数组（bytes）
+--字符串（string）
+--数组（array）：固定长度数组（Fixed-size Arrays）、动态长度数组（Dynamic-size Arrays）
+--结构体（struct）
+--映射（mapping）
+--合约（contract）
+
+constant说明(统称：常量)：
+--在编译时必须赋值(即，声明的时候)
+--读取时，几乎不消耗 gas
+--适用：如数学常量、固定的配置值等
+
+immutable说明(统称：不变量)：
+--在编译时必须赋值(即，声明的时候)，在合约部署时赋值(即，构造函数)；必须是二者取其一!
+--读取时，消耗 gas
+--适用：如合约的初始化参数、合约的部署地址等
+
+
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+整数类型细说：
+--不论uint或者int【8位 ~ 256位】【使用字节对齐的方式位数值是8/16/24/32/40/48/56/64/72/80/88/96...........256】【粗暴理解为8的倍数值】
+--占位字节数【1 ~ 32】
+
+uint
+--取值范例【0 ~ 1111 1111】
+--取值【0 ~ 2^Bit -1】
+--如【0 ~ 2^8 -1】即【0 ~ 255】
+
+int(建议复习一下计算机的补码原理)
+--取值范例【1111 1111 , 0111 1111】
+--取值【-1*(2^(Bit-1)) ~ 2^(Bit-1) -1】
+--如【-1*(2^7) ~ 2^7 -1】即【-128 ~ 127】
+
+地址类型细说：
+--20字节值
+--十六进制字符的每一位都可以表示 16 种不同的值，而 4 位二进制数据也可以表示 16 种不同的值（0 到 15）；每1位个十六进制字符代表4位个二进制
+--1个字节 = 8位个二进制数
+--20个字节 = 8*20位个二进制数 = 8*20/4位个二进制数 = 40位个十六进制数
+--如，0x1234567890123456789012345678901234567890，十六进制表达方式，即40个值
+
+定长字节型细说：
+bytes32 public _byte32 = "MiniSolidity";
+--"MiniSolidity"的长度是11个字符。每个字符在UTF-8编码中占用1个字节，所以总长度是11字节。
+--"MiniSolidity" + 21个零字节
+--4d696e69536f6c69646974790000000000000000000000000000000000000000
+
+枚举类型细说：
+--底层类型是 uint（无符号整数）所以，即使显性的赋值，也不得小于0
+    enum Status {
+        Invalid = -1,   // 编译错误: 值必须是无符号整数
+        InIdle          // 默认值为0
+        InProgress      // 1
+        InPause = 5     // 5
+        InEnd           // 6
+    }
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+动态大小的字节数组细说：
+--bytes是一个更通用的动态字节数组，可以存储任意字节数据。
+--bytes dynamicBytes = "Hello, Solidity!";
+
+字符串细说：
+--string是bytes的一个子类型
+--string 是一种动态长度的 Unicode(UTF-8编码) 字符串，用于存储文本数据。
+--string 是 bytes 的一个特殊形式，专门用于处理文本。
+--string message = "Hello, Solidity!";
+
+数组类型细说：
+--uint[3] fixedSizeArray = [1, 2, 3];
+--uint[] dynamicArray; dynamicArray.push(1); dynamicArray.push(2); dynamicArray.push(3);
+
+映射（mapping）类型细说：
+--必须存储在storage中
+--不储存任何键（Key）的资讯，也没有length的资讯，故，不支持迭代或获取键的集合，只能通过键快速访问值
+--主键只能是值类型（如 uint、address 等），而值可以是任意类型，包括引用类型。
+
+------------------------------------------------------------------------------------------------------------------------------------------
+
+函数形式：
+function <function name>(<parameter types>) {internal|external|public|private} [pure|view|payable] [returns (<return types>)]
+
+函数可见性：
+public：内部和外部均可见。
+private：只能从本合约内部访问，继承的合约也不能使用。
+external：只能从合约外部访问（但内部可以通过 this.f() 来调用，f是函数名，但这种调用方式消耗gas较多，不推荐）。
+internal: 只能从合约内部访问，继承的合约可以用。
+
+函数权限(功能关键字)：
+payable：可支付
+pure：纯净(不读不写)
+view：纯读
+
+变量的存储位置(顺带介绍)：
+storage：存储在链上
+memory：存储在内存中
+calldata：存储在内存中(一般修饰函数的参数，但不可更改它)
+
+函数形式示例：
+    function foo() public {
+        //Nothing
+    }
+
+    function foo() public pure {
+        //Nothing
+    }
+
+    function foo() public pure returns(uint) {
+        return 1;
+    }
+
+    function foo() public pure returns(uint ret) {
+        ret = 1;
+    }
+
+    function foo() public pure returns(uint ret) {
+        return  1;
+    }       
+
+必须使用memory的情形：
+--函数的参数(或返回值)，如果是string、bytes 数组
+--函数体内，使用 new 关键字创建数组
+
+函数体内，创建结构体struct
+Person memory newPerson = new Person({...});    是过时的语法，Solidity 0.8.x以前的版本使用
+Person memory newPerson = Person({...});        是推荐的语法，Solidity 0.8.x以及之后的版本使用
+Person memory newPerson = Person(...);          是推荐的语法，Solidity 0.8.x以及之后的版本使用
+
+固定长度数组的声明(同时初始化，可选)：
+uint[8] array0;
+uint[3] array1 = [uint(1), 2, 3];   //如果不强转1，可能会编译不通过
+bytes1[5] array2;
+address[100] array3;
+
+动态长度数组的声明(不可能同时初始化)：
+uint[] array4;
+bytes1[] array5;
+address[] array6;
+bytes array7;                       //bytes比较特殊，是数组，但是不用加[]
+
+数组的成员(变量，以及函数)
+--length            长度
+--push(x)           动态数组尾部添加元素
+--pop()             动态数组末尾移除最后一个元素，并返回该元素
+--delete ary[index] 把指定元素重置为默认值
+--delete ary        动态长度数组，把指定元素重置为默认值，数组长度变为0
+--delete ary        固定长度数组，把指定元素重置为默认值，数组长度不变化

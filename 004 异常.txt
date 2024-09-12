@@ -1,0 +1,32 @@
+几种异常：
+
+require：
+--solidity 0.8版本之前抛出异常的常用方法，缺点就是gas随着描述异常的字符串长度增加，比error命令要高
+--失败时消耗部分 gas：如果条件为假，交易将回滚并恢复到调用之前的状态，退还剩余的 gas，并可以返回自定义错误消息。
+--适用：业务常规检查判断(通常用于验证输入、权限检查等)
+--控制台的异常定位，比较明显
+--require(amount > 0, "Amount must be greater than zero");
+--require(amount > 0);
+
+assert：
+--类似于require，但不能传入描述字符串
+--失败时消耗所有 gas：如果条件为假，交易将回滚并消耗所有剩余的 gas。
+--适用：逻辑检查判断(通常用于检测代码中的严重错误和不变量违反、不应发生的错误)
+--控制台的异常定位，不明显
+--assert(result >= a);
+
+revert：
+--用于终止执行并回滚状态，可以选择返回错误消息。
+--失败时消耗所有 gas：使用字符串参数，自然消耗gas多
+--适用：复杂逻辑回滚、自定义错误处理
+--总 gas 消耗 = 基础消耗（约 21,000 gas） + 字符长度 * 每字符消耗（约 68 gas）。
+--控制台的异常定位，比较明显
+--revert("Failed to send Ether");
+
+error：
+--solidity 0.8.4版本新增，高效省gas，抛出异常
+--更加节省 gas：在触发时不会消耗过多的 gas，并且可以带有参数来提供更多的上下文信息，必须搭配revert一起，所以具备回滚特性
+--控制台的异常定位，比较明显
+--error TransferNotOwner();                 // 自定义error
+--error TransferNotOwner(address sender);   // 自定义的带参数的error
+--revert TransferNotOwner();                // revert出

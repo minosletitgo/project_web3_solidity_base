@@ -1,0 +1,6 @@
+修饰器（modifier）：
+
+modifier onlyOwner {
+   require(msg.sender == owner); // 检查调用者是否为owner地址
+   _; // 如果是的话，继续运行函数主体；
+}
