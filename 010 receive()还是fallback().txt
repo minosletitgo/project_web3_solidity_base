@@ -1,0 +1,27 @@
+
+
+                       接收ETH
+                         |
+                   msg.data是空？
+                      /      \
+                     /        \
+       transfer(value)       call{value: value}(data)，且data指向的函数不存在
+           send(value)          \
+   call{value: value}()          \
+                 /                \
+                是                 否
+               /                    \
+         receive()存在?             fallback()
+             / \
+            是  否
+           /     \
+    receive()   fallback()
+
+
+
+
+
+代理合约模式中：
+--把"代理合约的地址"，放入"At address"(Load contract from address)，加载出一个逻辑合约。
+--此时，该逻辑合约，它的原始数据来源是代理合约。
+--此时，调用该逻辑合约的业务函数(该函数在代理合约中并未定义)，则会触发代理合约中的fallback函数
