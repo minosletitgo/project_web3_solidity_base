@@ -18,6 +18,10 @@
     receive()   fallback()
 
 
+目标合约接收以太币的说明(contracts/TestFallback.sol):
+--TryCallTarget_0：发送以太币（0或者大于0，都一样） + 指定函数签名为空 = 只会触发receive
+--TryCallTarget_1：发送以太币（0或者大于0，都一样） + 指定已存在函数的签名 = 不会触发receive，也不会触发fallback
+--TryCallTarget_2：发送以太币（0或者大于0，都一样） + 指定不存在函数的签名 = 只会触发fallback
 
 
 
