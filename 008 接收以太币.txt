@@ -25,7 +25,7 @@ fallback()函数：
 --关于gas：调用者通常会使用call触发fallback，但仍然建议不要过于复杂，以免突破gas限制。
 
 
-                     接收ETH时
+                     接收ETH
                         |
                    msg.data是空？
                       /      \
