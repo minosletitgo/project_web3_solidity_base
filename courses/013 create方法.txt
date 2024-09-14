@@ -1,0 +1,119 @@
+
+概述：
+--在以太坊虚拟机（EVM, Ethereum Virtual Machine）中，CREATE是一个操作码（opcode），用来创建新的智能合约账户（也称为合约账户）。
+--CREATE操作码允许现有的合约（外部拥有账户EOA或者合约账户）通过发送一个交易来部署新的合约代码到区块链上。
+--从以太坊伊斯坦布尔硬分叉(2019年12月8日左右)开始，引入了CREATE2操作码，它允许更可预测地确定新合约地址，并且支持确定性的合约部署。
+--CREATE2相比于CREATE提供了额外的salt值，使得合约地址可以通过计算得出，而不依赖于交易的nonce。
+
+
+
+CREATE 或 CREATE2 操作码的工作方式
+--交易提交：当一个包含合约字节码的交易被提交到网络时，它会被包含在一个区块内。
+--区块挖掘：当区块被挖出时，包含交易的调用栈会执行CREATE或CREATE2操作码。
+--条件检查：CREATE或CREATE2操作码会检查是否满足创建新合约的条件，比如是否有足够的gas来支付创建合约的成本。
+--创建合约账户：如果条件满足，EVM就会尝试创建一个新的合约账户，并且将提供的字节码写入该账户的状态存储中。
+--执行构造函数：创建过程中，如果合约构造函数执行成功，并且没有遇到错误（如超出gas限制），那么新合约就会被部署成功，并且返回新合约的地址。
+
+
+合约的部署字节码(或，原始字节码)：
+--合约部署时，合约代码的原始字节。
+--这个字节码是由 Solidity 编译器生成的，代表了合约的机器代码，能够被以太坊虚拟机（EVM）执行。
+--获取：type(合约名).creationCode
+--大部分时候字节码是固定的(少量影响因素：编译器版本变化、合约代码变化、编译器的优化设置变化)
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+CREATE操作码的适用场景：
+--标准合约部署，当你需要部署一个新合约，且不需要预测或控制合约地址时。
+--内部合约创建: 在合约中创建新的合约时，CREATE 可以方便地用于合约间的互动。
+
+CREATE操作码的优点：
+--简单性: 直接创建合约，不需要额外的参数。
+--广泛兼容性: 在旧版本的以太坊和现有系统中广泛支持。
+
+CREATE操作码的缺点：
+--地址不可预测: 由于地址依赖于交易的 nonce，因此无法在合约部署前预测合约地址。
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+--使用new操作符来部署新的合约实例时，即触发EVM中的CREATE操作码。
+Contract x = new Contract{value: _value}(params)
+
+
+
+--使用底层assembly来访问CREATE操作码，且目标合约没有构造函数参数。
+    function deployUsingCreate(uint256 _number) public payable returns (address) {
+        bytes memory bytecode = type(MyContract).creationCode;// 获取目标合约的字节码        
+        address newContractAddress;
+
+        assembly {
+            newContractAddress := create(
+                0,                   // 省略了gas预留参数，那么默认会使用全部剩余的gas
+                add(bytecode, 0x20), // 从bytecode的起始地址加上32字节（即0x20），这样做的目的是跳过长度字段，指向真正的字节码内容的起始位置。
+                mload(bytecode)      // 加载的是从bytecode的起始地址开始的32字节数据，这通常是字节码的长度信息。
+            )
+        }
+
+        return newContractAddress;
+    }
+
+--使用底层assembly来访问CREATE操作码，且目标合约有构造函数参数。
+    function deployUsingCreate(uint256 _number) public payable returns (address) {
+        bytes memory bytecode = type(MyContract).creationCode;// 获取目标合约的字节码
+        bytes memory constructorArgs = abi.encode(_greeting); // 将目标合约的构造函数参数进行编码
+        bytes memory deploymentData = abi.encodePacked(bytecode, constructorArgs); // 拼接 目标合约的字节码 和 构造函数参数的编码
+        address newContractAddress;
+
+        assembly {
+            newContractAddress := create(
+                0,                          // 省略了gas预留参数，那么默认会使用全部剩余的gas
+                add(deploymentData, 0x20),  // 从bytecode的起始地址加上32字节（即0x20），这样做的目的是跳过长度字段，指向真正的字节码内容的起始位置。
+                mload(bytecode)             // 加载的是从bytecode的起始地址开始的32字节数据，这通常是字节码的长度信息。
+            )
+        }
+
+        return newContractAddress;
+    }    
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+在不部署合约的情况下，预测合约的地址:
+--公式：new_contract_address = keccak256(0xff ∣∣ creator_address ∣∣ nonce ∣∣ init_code)
+--0xff：常量字节
+--creator_address：部署者的地址
+--nonce：部署者的交易计数器(注意：每个地址的 nonce 值在发送交易时由网络维护，合约中是不能直接获取交易的 nonce)
+--在ethers.js中，const nonce = await provider.getTransactionCount(address);
+
+    // 计算CREATE生成的合约地址
+    function computeCreateAddress(address _creator, uint256 _nonce, bytes memory _bytecode) public pure returns (address) {
+        bytes32 hash = keccak256(
+            abi.encodePacked(
+                byte(0xff),
+                _creator,
+                _nonce,
+                keccak256(_bytecode)
+            )
+        );
+        return address(uint160(uint256(hash)));
+    }
+
+    // 计算目标合约的字节码(考虑有构造函数参数)
+    function getExampleBytecode(uint256 _param1, string memory _param2) public pure returns (bytes memory) {
+        // 先计算初始化字节码
+        bytes memory bytecode = type(ExampleContract).creationCode;
+        // 在字节码末尾追加构造函数参数的编码
+        bytes memory constructorArgs = abi.encode(_param1, _param2);
+        return abi.encodePacked(bytecode, constructorArgs);
+    }
+
+写在最后，通常情况下不认定create操作码，是不具备预测地址的特性的(nonce值，即使在js中，也难以预测!)
