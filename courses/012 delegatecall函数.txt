@@ -11,7 +11,7 @@ delegatecall()函数的使用规则：
 --delegatecall 只会传递函数调用的参数和数据，而不会涉及 ETH 的传递，以及gas费用。
 --字节码：abi.encodeWithSignature("函数签名", 逗号分隔的具体参数)
 
-范例(详细见：(contracts/TestDelegatecall.sol):)：
+范例(contracts/TestDelegatecall.sol)：
     // 通过call来调用Logic的setVars()函数，将改变合约Logic里的状态变量(Logic中 num = 此处的_num，sender = Proxy的地址)
     function callSetVars(uint256 _num) external payable {
         // call setVars()
