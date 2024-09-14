@@ -88,7 +88,7 @@ Contract x = new Contract{value: _value}(params)
 
 
 在不部署合约的情况下，预测合约的地址:
---公式：new_contract_address = keccak256(0xff ∣∣ creator_address ∣∣ nonce ∣∣ init_code)
+--公式：address = keccak256(0xFF ++ creator_address ++ _nonce ++ keccak256(init_code))
 --0xff：常量字节
 --creator_address：部署者的地址
 --nonce：部署者的交易计数器(注意：每个地址的 nonce 值在发送交易时由网络维护，合约中是不能直接获取交易的 nonce)
