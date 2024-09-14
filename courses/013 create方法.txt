@@ -47,7 +47,7 @@ Contract x = new Contract{value: _value}(params)
 
 
 
---使用底层assembly来访问CREATE操作码，且目标合约没有构造函数参数。
+--使用底层assembly来访问CREATE操作码，且目标合约没有构造函数参数。(详见：TestCreate.sol)
     function deployUsingCreate(uint256 _number) public payable returns (address) {
         bytes memory bytecode = type(MyContract).creationCode;// 获取目标合约的字节码        
         address newContractAddress;
@@ -63,7 +63,7 @@ Contract x = new Contract{value: _value}(params)
         return newContractAddress;
     }
 
---使用底层assembly来访问CREATE操作码，且目标合约有构造函数参数。
+--使用底层assembly来访问CREATE操作码，且目标合约有构造函数参数。(详见：TestCreate.sol)
     function deployUsingCreate(uint256 _number) public payable returns (address) {
         bytes memory bytecode = type(MyContract).creationCode;// 获取目标合约的字节码
         bytes memory constructorArgs = abi.encode(_greeting); // 将目标合约的构造函数参数进行编码
