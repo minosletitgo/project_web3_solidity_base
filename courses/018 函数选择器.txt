@@ -1,0 +1,42 @@
+
+函数选择器的概念：当我们调用智能合约的普通函数时，本质上是向目标合约发送了一段calldata，这个数据就是"交易数据(transactions)"
+
+在调用合约FunctionSelector成功后，查看"Transaction Action"或"input":
+--当部署的时候，使用的是"合约部署字节码"（即，creationCode）
+--当调用普通函数的时候，使用的是"函数Selector"（前4字节为"selector"，后32字节为"参数"）
+--"method ID"等价于"function selector"，它唯一标识合约中某个函数。
+--编程范例，详见(contract/TestFunctionSelector.sol)
+
+编程表达式简述：
+bytes4 data = bytes4(keccak256("functionName(paramType1,paramType2...)"))
+
+基础类型参数：
+bytes4 data = bytes4(keccak256("functionName(uint256,bool)"))
+
+固定长度类型参数：
+bytes4 data = bytes4(keccak256("functionName(uint256[3])"))
+
+可变长度类型参数：
+bytes4 data = bytes4(keccak256("functionName(uint256[],string)"))
+
+映射类型参数：(地址类型，struct类型，枚举类型)
+bytes4 data = bytes4(keccak256("functionName(address,(uint256,bytes),uint8)"))
+
+注意：在没有函数重载的情况下，完全等价于以下：
+bytes4 data = this.functionName.selector;
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+其他：
+使用selector进行调用目标合约的函数(详见：016 abi编码相关.txt)
+
+三种方式如下：
+
+bytes memory data = abi.encodeWithSignature("doSomething(uint256,bool)",123,true);
+(bool success1, bytes memory data1) = address(targetContract).call(data);
+
+bytes4 memory data = this.functionName.selector;
+(bool success1, bytes memory data1) = address(targetContract).call(abi.encodeWithSelector(data, 123, true));
+
+bytes4 memory data = bytes4(keccak256("doSomething(uint256,bool)"))
+(bool success1, bytes memory data1) = address(targetContract).call(abi.encodeWithSelector(data, 123, true));

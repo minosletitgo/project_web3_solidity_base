@@ -57,6 +57,8 @@ bytes32 public _byte32 = "MiniSolidity";
 
 枚举类型细说：
 --底层类型是 uint（无符号整数）所以，即使显性的赋值，也不得小于0
+--如果枚举的成员数量在256个以内，则底层类型为uint8
+--如果枚举的成员数量超过256个，则底层类型为uint256(即，uint)
     enum Status {
         Invalid = -1,   // 编译错误: 值必须是无符号整数
         InIdle          // 默认值为0
