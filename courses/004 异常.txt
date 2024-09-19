@@ -30,3 +30,29 @@ error：
 --error TransferNotOwner();                 // 自定义error
 --error TransferNotOwner(address sender);   // 自定义的带参数的error
 --revert TransferNotOwner();                // revert出
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+try-catch说明：
+--Solidity 版本需要在 0.6.0 及以上才能使用 try-catch
+--try-catch 能捕获外部合约的调用错误，而无法捕获当前合约内部的错误。
+--try-catch 能捕(目标合约地址.call/delegatecall)调用错误。
+
+几种写法：
+
+try externalContract.f() returns(returnType val){
+    // call成功的情况下 运行一些代码
+} catch {
+    // call失败的情况下 运行一些代码
+}
+
+try externalContract.f() returns(returnType){
+    // call成功的情况下 运行一些代码
+} catch Error(string memory /*reason*/) {
+    // 捕获revert("reasonString") 和 require(false, "reasonString")
+} catch Panic(uint /*errorCode*/) {
+    // 捕获Panic导致的错误 例如assert失败 溢出 除零 数组访问越界
+} catch (bytes memory /*lowLevelData*/) {
+    // 如果发生了revert且上面2个异常类型匹配都失败了 会进入该分支
+    // 例如revert() require(false) revert自定义类型的error
+}
