@@ -1,5 +1,6 @@
 // SPDX-License-Identifier: MIT
---Massachusetts Institute of Technology, 简称MIT
+--SPDX：Software Package Data Exchange(软件包数据交换，提供一个标准化的方式来交换和描述软件包的许可证信息)
+--MIT：Massachusetts Institute of Technology
 --开源许可证，但它要求保留版权声明和许可证声明，
 --它是Github上使用率最高的许可证
 --它最初由麻省理工学院开发和使用
