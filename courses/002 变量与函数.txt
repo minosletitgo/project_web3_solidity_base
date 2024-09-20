@@ -2,13 +2,14 @@
 --布尔型（bool）
 --整数型（int 和 uint）
 --地址型（address）（20 字节）
+--固定长度数组（Fixed-size Arrays）
 --定长字节型（bytes1 到 bytes32）（1个字节 到 32个字节）
 --枚举型（enum）（起始值 0）
 
 引用类型（Reference Types）完全统计：
 --动态大小的字节数组（bytes）
 --字符串（string）
---数组（array）：固定长度数组（Fixed-size Arrays）、动态长度数组（Dynamic-size Arrays）
+--动态长度数组（Dynamic-size Arrays）
 --结构体（struct）
 --映射（mapping）
 --合约（contract）
