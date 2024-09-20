@@ -19,10 +19,10 @@
 
 
 目标合约接收以太币的说明(contracts/TestFallback.sol):
---TryCallTarget_0：发送以太币（0或者大于0，都一样） + 指定函数签名为空 = 返回值true + 只会触发receive
---TryCallTarget_1：发送以太币（0或者大于0，都一样） + 指定已存在函数的签名 = 返回值true + 不会触发receive，也不会触发fallback
---TryCallTarget_2：发送以太币（0或者大于0，都一样） + 指定不存在函数的签名 = 返回值true + 只会触发fallback
---TryCallTarget_3：发送以太币（0或者大于0，都一样） + 不指定函数的签名 = 返回值true + 只会触发receive
+--TryCallTarget_0：发送以太币（0或者大于0，都一样） + 指定函数签名为空(等价于msg.data为空) = 返回值true + 只会触发receive
+--TryCallTarget_1：发送以太币（0或者大于0，都一样） + 指定已存在函数的签名(等价于msg.data不为空) = 返回值true + 不会触发receive，也不会触发fallback(很神奇，remix测试结果，不知道什么原因)
+--TryCallTarget_2：发送以太币（0或者大于0，都一样） + 指定不存在函数的签名(等价于msg.data不为空) = 返回值true + 只会触发fallback
+--TryCallTarget_3：发送以太币（0或者大于0，都一样） + 不指定函数的签名(等价于msg.data为空) = 返回值true + 只会触发receive
 
 
 代理合约模式中：
