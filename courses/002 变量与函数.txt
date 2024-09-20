@@ -109,7 +109,7 @@ view：纯读(注意，使用emit 事件，也认定为修改了合约状态，�
 变量的存储位置(顺带介绍)：
 storage：存储在链上
 memory：存储在内存中
-calldata：存储在内存中(一般修饰函数的参数，但不可更改它)
+calldata：存储在内存中(一般修饰external函数的参数，但不可更改它)
 
 函数形式示例：
     function foo() public {
