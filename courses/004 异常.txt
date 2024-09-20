@@ -38,7 +38,7 @@ try-catch说明：
 --try-catch 能捕获外部合约的调用错误，而无法捕获当前合约内部的错误。
 --try-catch 能捕(目标合约地址.call/delegatecall)调用错误。
 
-几种写法：
+几种写法(可以没有returns语句)：
 
 try externalContract.f() returns(returnType val){
     // call成功的情况下 运行一些代码
