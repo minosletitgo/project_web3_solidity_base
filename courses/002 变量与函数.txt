@@ -158,7 +158,7 @@ Person memory newPerson = Person(...);          是推荐的语法，Solidity 0.
 
 固定长度数组的声明(同时初始化，可选)：
 uint[8] array0;
-uint[3] array1 = [uint(1), 2, 3];   //如果不强转1，可能会编译不通过
+uint[3] array1 = [uint(1), 2, 3];   //如果不强转1，可能会编译不通过(编译器默认会把1识别int256)
 bytes1[5] array2;
 address[100] array3;
 
