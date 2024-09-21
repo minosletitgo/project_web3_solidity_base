@@ -11,7 +11,6 @@
 --字符串（string）
 --动态长度数组（Dynamic-size Arrays）
 --结构体（struct）
---映射（mapping）
 --合约（contract）
 
 映射类型（Mapping Types）完全统计：
