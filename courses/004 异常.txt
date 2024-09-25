@@ -73,3 +73,25 @@ try address(externalContract).call(data) returns (bytes memory returnData) {
     // 如果发生了revert且上面2个异常类型匹配都失败了 会进入该分支
     // 例如revert() require(false) revert自定义类型的error
 }
+
+
+////////////////////////////////////////////////////////////////////////////////////////////
+
+
+unchecked 关键字：
+--在Solidity 0.8.0版本引入了unchecked关键字，允许你在执行某些操作时不进行溢出检查。
+--适用：这通常用于优化循环中的累加或累乘操作，在这种情况下，你已经非常确保不会发生溢出。
+--优点：提升性能
+--缺点：如果不幸发生了溢出，结果会环绕并继续计算，这可能导致意想不到的结果。
+
+示例：
+    function uncheckedSum(uint256[] memory numbers) public pure returns (uint256) {
+        uint256 sum;
+        // 使用 unchecked 块来禁用溢出检查
+        unchecked {
+            for (uint256 i = 0; i < numbers.length; i++) {
+                sum += numbers[i]; // 这里不会有自动溢出检查
+            }
+        }
+        return sum;
+    }
