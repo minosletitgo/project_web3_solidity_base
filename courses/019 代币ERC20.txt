@@ -19,7 +19,7 @@ IERC20标准的主选函数6个：
 --balanceOf(address owner): 查询指定账户(owner)的代币余额。
 --transfer(address to, uint256 value): 从账户(msg.sender)，转指定数量(value)的代币，到另一个账户(to)。
 --transferFrom(address from, address to, uint256 value): 某个账户(from)，委托给交易所(msg.sender)，把自己账户(from)的一定数量(value)的代币，转给另一个账户(to)。
---approve(address spender, uint256 value): 一个账户(msg.sender)，授权给交易所(spender)，可以花费自己账户(from)的一定数量(value)的代币。
+--approve(address spender, uint256 value): 一个账户(msg.sender)，授权给交易所(spender)，可以花费自己账户(msg.sender)的一定数量(value)的代币。
 --allowance(address owner, address spender): 查询账户(owner)对指定账户(spender)的授权代币数量。
 
 IERC20标准的主选事件2个：
