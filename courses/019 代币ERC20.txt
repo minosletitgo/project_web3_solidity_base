@@ -16,11 +16,11 @@
 
 IERC20标准的主选函数6个：
 --totalSupply(): 返回代币总供应量。
---balanceOf(address owner): 查询指定地址的代币余额。
---transfer(address to, uint256 value): 转账指定数量的代币。
---transferFrom(address from, address to, uint256 value): 从通过授权机制指定地址转账代币。
---approve(address spender, uint256 value): 允许某地址提取指定数量的代币。
---allowance(address owner, address spender): 查询指定地址的授权额度。
+--balanceOf(address owner): 查询指定账户(owner)的代币余额。
+--transfer(address to, uint256 value): 从账户(msg.sender)，转指定数量(value)的代币，到另一个账户(to)。
+--transferFrom(address from, address to, uint256 value): 某个账户(from)，委托给交易所(msg.sender)，把自己账户(from)的一定数量(value)的代币，转给另一个账户(to)。
+--approve(address spender, uint256 value): 一个账户(msg.sender)，授权给交易所(msg.sender)，可以花费自己账户(from)的一定数量(value)的代币。
+--allowance(address owner, address spender): 查询账户(owner)对指定账户(spender)的授权代币数量。
 
 IERC20标准的主选事件2个：
 --Transfer(address indexed from, address indexed to, uint256 value): 代币转账事件。
@@ -41,6 +41,8 @@ IERC20非标准函数：
 其他问题：
 --一定是先使用授权approve()，再使用transferFrom()转账!
 --在生产环境下，链端一般是不存储持币用户列表的数据(维护消耗大)，一般通过关联的后端，或者分析交易日志，来获取交易者信息。
+--项目具有总供应量固定的经济模型，会使用预铸造(即，在构造函数中一次性给管理员铸造全部代币)。
+--项目具有动态铸造代币的经济模型，代币供应量可能根据特定条件逐步增加(如，奖励机制、生态发展、流动性挖矿等)。
 
 著名案例：关于"USDT泰达币没有严格遵循ERC20标准"，在使用IERC20强转时，无法转出！
 --需要严格按照IERC20的参数，以及返回值来定义基本函数
