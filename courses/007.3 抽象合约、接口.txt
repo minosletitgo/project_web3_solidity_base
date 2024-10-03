@@ -5,10 +5,11 @@
 
 接口：
 --接口类似于抽象合约，但它不实现任何功能。
---接口不能包含状态变量
---接口不能包含构造函数
---接口不能继承除接口外的其他合约，但接口可以继承于其他接口！
---接口所有函数都必须是external且不能有函数体
+--接口不能包含状态变量。
+--接口不能包含构造函数。
+--接口不能继承除接口外的其他合约，但接口可以继承于其他接口。
+--接口所有函数都必须是external且不能有函数体。
+--接口内，可以包含事件。
 --继承接口的非抽象合约必须实现接口定义的所有功能。
 --继承接口的抽象合约可以选择不实现接口的所有函数。
 --使用接口定义"代币标准"，比较常见。
@@ -19,6 +20,9 @@
 手写一下ERC20接口：
 
 interface IERC20 {
+    event Transfer(address indexed from, address indexed to, uint256 value);
+    event Approve(address indexed from, address indexed to, uint256 value);
+
     function totalSupply() external view returns (uint256);
     function balanceOf(address account) external view returns (uint256);
     function transfer(address to, uint256 value) external returns (bool);
