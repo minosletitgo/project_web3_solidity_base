@@ -81,7 +81,7 @@ contract Son is Father, Mother {
 
 
 注意：
---[Son is Father, Mother]，代表的继承顺序为：Son 先继承于 Mother，在继承于 Father ！
+--[Son is Father, Mother]，代表的继承顺序为：Son 先继承于 Mother，再继承于 Father ！
 --多重继承时，override(Father, Grandfather)的编写。
 --super.hello()的机制，来源于继承的顺序！
 
