@@ -1,0 +1,88 @@
+
+概念：
+--继承是面向对象编程很重要的组成部分，可以显著减少重复代码。
+--如果把合约看作是对象的话，Solidity也是面向对象的编程，也支持继承。
+
+virtual与override：
+--父合约标记为virtual的函数，子合约可以选择重写它，即使用override。 也可以不重写它，即维持指向父合约。
+--override只能修饰函数，不认为它能够修饰合约的变量
+--如果确定"下辈分合约"需要重写目标函数，则仍然需要使用virtual，即使自己刚override
+
+//////////////////////////////////////////////////////////////////////
+
+单一继承实例：
+
+contract Grandfather {
+    function sayHello() public pure virtual returns (string memory) {
+        return "Hello from Grandfather!";
+    }
+}
+
+contract Father is Grandfather {
+    function sayHello() public pure virtual override returns (string memory) {
+        return "Hello from Father!";
+    }
+}
+
+contract Son is Father {
+    function sayHello() public pure virtual override returns (string memory) {
+        return "Hello from Son!";
+    }
+}
+
+
+//////////////////////////////////////////////////////////////////////
+
+多重(钻石)继承实例：
+
+    Grandfather
+        /  \
+    Father Mother
+        \  /
+        Son
+
+contract Grandfather {
+    function hello() public pure virtual returns (string memory) {
+        return "Hello from Grandfather";
+    }
+}
+
+contract Father is Grandfather {
+    function hello() public pure override returns (string memory) {
+        return "Hello from Father";
+    }
+}
+
+contract Mother is Grandfather {
+    function hello() public pure override returns (string memory) {
+        return "Hello from Mother";
+    }
+}
+
+contract Son is Father, Mother {
+    function hello() public pure override(Father, Mother) returns (string memory) {
+        return "Hello from Son";
+    }
+
+    // 调用最近的父合约，即Mother合约的hello() ！！！
+    function helloSuper() public pure override(Father, Mother) returns (string memory) {
+        return super.hello();
+    }    
+
+    // 调用父合约的 hello 方法
+    function callFatherHello() public pure returns (string memory) {
+        return Father.hello(); 
+    }
+
+    function callMotherHello() public pure returns (string memory) {
+        return Mother.hello(); 
+    }
+}
+
+
+注意：
+--[Son is Father, Mother]，代表的继承顺序为：Son 先继承于 Mother，在继承于 Father ！
+--多重继承时，override(Father, Grandfather)的编写。
+--super.hello()的机制，来源于继承的顺序！
+
+//////////////////////////////////////////////////////////////////////
