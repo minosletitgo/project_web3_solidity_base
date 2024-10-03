@@ -48,24 +48,24 @@ contract Grandfather {
 }
 
 contract Father is Grandfather {
-    function hello() public pure override returns (string memory) {
+    function hello() public pure virtual override returns (string memory) {
         return "Hello from Father";
     }
 }
 
 contract Mother is Grandfather {
-    function hello() public pure override returns (string memory) {
+    function hello() public pure virtual override returns (string memory) {
         return "Hello from Mother";
     }
 }
 
 contract Son is Father, Mother {
-    function hello() public pure override(Father, Mother) returns (string memory) {
+    function hello() public pure virtual override(Father, Mother) returns (string memory) {
         return "Hello from Son";
     }
 
     // 调用最近的父合约，即Mother合约的hello() ！！！
-    function helloSuper() public pure override(Father, Mother) returns (string memory) {
+    function helloSuper() public pure returns (string memory) {
         return super.hello();
     }    
 
