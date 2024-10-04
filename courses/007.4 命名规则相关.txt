@@ -1,10 +1,4 @@
 
-关于"合约文件的名称"与"合约的名称"：
---Solidity 编译器允许在不同的文件中有相同名称的合约，但在设计合约时保持清晰和一致的命名规范总是一个好的实践，以避免混淆和潜在的问题。
---如，ContractA.sol - contract Hello
---如，ContractB.sol - contract Hello
-
-
 合约名、库名、事件名、接口名、结构体名、枚举名(首字母大写)：
 contract MyToken { }
 library MathLib { }
@@ -23,5 +17,11 @@ uint256 constant MAX_SUPPLY = 1000000;
 
 
 
+关于"合约中变量命名"
+--参见OpenZepplin，成员变量，前缀统一加上下划线_(如，uint256 private _totalSupply = 0;)
 
 
+关于"合约文件的名称"与"合约的名称"：
+--Solidity 编译器允许在不同的文件中有相同名称的合约，但在设计合约时保持清晰和一致的命名规范总是一个好的实践，以避免混淆和潜在的问题。
+--如，ContractA.sol - contract Hello
+--如，ContractB.sol - contract Hello
