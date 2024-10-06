@@ -3,6 +3,7 @@
 --在太坊虚拟机上，是比较经济的存储数据的方式，每个大概消耗2,000 gas；相比之下，链上存储一个新变量至少需要20,000 gas
 --可以通过客户端（如 Web3.js 或 Ethers.js）进行监听和检索(如，交易的完成、数据的更新等)
 --参数可以带有indexed关键字，他们会保存在以太坊虚拟机日志的topics中，方便之后检索。
+--事件的定义，只能在 合约、抽象合约、接口中。
 
 event Transfer(address indexed from, address indexed to, uint256 value);
 
