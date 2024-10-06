@@ -33,7 +33,7 @@ contract MyContract is IMyInterface {
         emit ValueChanged(newValue); // 触发事件
     }
 
-    // 访问接口Id(后续ERC165章节会讲到)
+    // 访问接口Id(在 contract/TestInterface.sol 中有详细范例)
     function getInterfaceId() public pure returns (bytes4) {
         return type(IMyInterface).interfaceId;
     }
