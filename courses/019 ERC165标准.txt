@@ -1,0 +1,39 @@
+
+概念：
+--ERC165 是以太坊的一个重要标准，通过它，合约能够声明和识别接口，提高了以太坊生态系统中合约的互操作性和兼容性。
+
+主要特点：
+--接口识别：合约通过实现 supportsInterface 函数，返回一个布尔值，指示其是否支持特定的接口。
+--接口标识符：每个接口都有一个唯一的标识符（通常是一个 bytes4 类型的值），由接口的函数签名生成。通过这些标识符，外部合约可以确认目标合约是否支持特定功能。
+--灵活性：ERC165 使合约能够向外部系统声明其功能，从而促进合约间的交互与兼容性。
+
+应用场景：
+--代币标准（如 ERC721 和 ERC1155）：在 NFT 和其他代币合约中，ERC165 用于验证支持的接口，使得合约能够更好地与外部应用程序（如钱包、市场等）互动。
+--合约互操作性：通过使用 ERC165，开发者可以创建更具互操作性的合约，允许它们识别和调用其他合约的功能。
+
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+以下是实例：
+
+interface IERC165 {
+    function supportsInterface(bytes4 interfaceId) external view returns (bool);
+}
+
+contract ExampleContract is IERC165 {
+    // ERC165标识符
+    bytes4 private constant INTERFACE_ID_EXAMPLE = 0x12345678;
+
+    function supportsInterface(bytes4 interfaceId) external view override returns (bool) {
+        return interfaceId == INTERFACE_ID_EXAMPLE;
+    }
+}
+
+contract MyNFT is ERC721 {
+    constructor(string memory name, string memory symbol) ERC721(name, symbol) {}
+
+    // 支持的接口声明
+    function supportsInterface(bytes4 interfaceId) public view override(ERC721) returns (bool) {
+        return super.supportsInterface(interfaceId);
+    }
+}
+
