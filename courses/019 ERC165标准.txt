@@ -45,7 +45,7 @@ contract ERC20Token is IERC20 {
 
 function buyToken(address tokenContract, address buyer, uint256 amount) external {
     /*
-        用户A调用该函数
+        用户A调用该函数：
         如果代币合约遵循了IERC20标准，则用户A转账给用户buyer一些代币。
     */
 
