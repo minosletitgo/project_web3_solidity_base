@@ -76,7 +76,7 @@ interface IERC721Metadata is IERC721 {
     // 返回代币的简短标识符。
     function symbol() external view returns (string memory);
 
-    // 通过tokenId查询metadata的链接url
+    // 通过tokenId查询metadata的链接url(通常指向一个 JSON 文件，包含有关代币的详细信息，例如名称、描述、图像链接等。)
     function tokenURI(uint256 tokenId) external view returns (string memory);
 }
 
