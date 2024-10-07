@@ -26,4 +26,14 @@ contract MyContract {
         // 将所有选择器进行 XOR 运算，得到 interfaceId
         return selector1 ^ selector2 ^ selector3;
     }
+
+    function getInterfaceId3() public pure returns (bytes4) {
+        // 使用接口的选择器来获取每个函数的选择器
+        bytes4 selector1 = IMyInterface.myFunction.selector;
+        bytes4 selector2 = IMyInterface.anotherFunction.selector;
+        bytes4 selector3 = IMyInterface.thirdFunction.selector;
+
+        // 将所有选择器进行 XOR 运算，得到 interfaceId
+        return selector1 ^ selector2 ^ selector3;
+    }
 }
