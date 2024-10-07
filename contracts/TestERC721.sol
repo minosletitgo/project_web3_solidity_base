@@ -62,6 +62,7 @@ interface IERC721Metadata {
 
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
 
+// ERC721合约主体
 contract ERC721 is IERC721, IERC721Metadata{
     using Strings for uint256; // 使用String库，
 
@@ -317,3 +318,25 @@ contract ERC721 is IERC721, IERC721Metadata{
         return "";
     }
 }
+
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+// 接收ERC721转账的测试合约
+contract Hello is IERC721Receiver {
+    event TokenReceived(address operator, address from, uint256 tokenId, bytes data);
+
+    function onERC721Received(
+        address operator,
+        address from,
+        uint256 tokenId,
+        bytes calldata data
+    ) external override returns (bytes4) {
+        // 处理接收到的 ERC721 代币，可以添加自定义逻辑
+        emit TokenReceived(operator, from, tokenId, data);
+        
+        // 返回这个选择器表示成功接收
+        return this.onERC721Received.selector;
+    }
+}
+
+
