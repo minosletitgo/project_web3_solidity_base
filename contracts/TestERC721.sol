@@ -138,6 +138,7 @@ contract ERC721 is IERC721, IERC721Metadata{
     }
      
     // 授权函数。通过调整_tokenApprovals来，授权 to 地址操作 tokenId，同时释放Approval事件。
+    // 如果 to 地址为0，则代表 将该代币的授权设置为零(即，撤销了它之前的有效授权地址，相当于收回授权。)
     function _approve(
         address owner,
         address to,
