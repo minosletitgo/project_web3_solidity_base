@@ -12,17 +12,22 @@
 应用场景：
 --它广泛应用于数字艺术、游戏物品、收藏品等领域。
 
-IERC721标准的主选函数6个：
+IERC721标准的主选函数9个：
 --balanceOf(address owner)：返回指定地址拥有的代币数量。
 --ownerOf(uint256 tokenId)：返回指定代币ID的当前拥有者地址。
 --transferFrom(address from, address to, uint256 tokenId)：将指定代币从一个地址转移到另一个地址。
 --safeTransferFrom(address from, address to, uint256 tokenId)：安全转移代币，确保接收者是一个能够处理代币的合约(合约的话，会要求实现ERC721Receiver接口)或地址。
+--safeTransferFrom(address from, address to, uint256 tokenId, bytes data)：同上，但允许附加数据传递。
 --approve(address to, uint256 tokenId)：授权另一个地址使用你的NFT。
 --getApproved(uint256 tokenId)：查询tokenId被批准给了哪个地址。
+--setApprovalForAll(address operator, bool approved)：将自己持有的该系列NFT批量授权给某个地址operator。
+--isApprovedForAll(address owner, address operator)：查询某地址的NFT是否批量授权给了另一个operator地址。
 
 
-IERC721标准的主选事件2个：
-
+IERC721标准的主选事件3个：
+--Transfer(address indexed from, address indexed to, uint256 indexed tokenId)：代币转账事件。
+--Approval(address indexed owner, address indexed approved, uint256 indexed tokenId)：授权事件。
+--ApprovalForAll(address indexed owner, address indexed operator, bool approved)：批量授权事件。
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
