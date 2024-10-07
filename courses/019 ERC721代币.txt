@@ -58,7 +58,7 @@ IERC721标准的主选事件3个：
 //////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 
 IERC721Receiver：
---如果接收代币的地址，指向的是合约，那么该合约必须实现IERC721Receiver接口，否则在进行"安全转账"的时候会发生回退，这是为了防止代币被转入黑洞中。
+--如果接收代币的地址，指向的是合约(通常指的是，钱包/经纪人/拍卖应用程序)，那么该合约必须实现IERC721Receiver接口，否则在进行"安全转账"的时候会发生回退，这是为了防止代币被转入黑洞中。
 
 interface IERC721Receiver {
     function onERC721Received(address operator, address from, uint tokenId, bytes calldata data) external returns (bytes4);
