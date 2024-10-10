@@ -51,7 +51,15 @@
 
 #### 使用new操作符来部署新的合约实例时，即触发EVM中的CREATE操作码。
 ```
-Contract x = new Contract{value: _value}(params)
+    Contract x = new Contract{value: _value}(params)
+    
+    function deployHello1_New() public returns (address) {
+        address addr;
+        Hello1 hello = new Hello1{value: msg.value}();        
+        addr = address(hello);
+        emit ContractDeployed("deployHello1_New", addr);
+        return addr;
+    }
 ```
 
 #### 使用底层assembly + CREATE操作码 来部署合约，且目标合约没有构造函数参数。(详见：TestCreate.sol)

@@ -22,7 +22,16 @@
 
 #### 使用new操作符来部署新的合约实例时，即触发EVM中的CREATE2操作码。
 ```
-Contract x = new Contract{salt: _salt, value: _value}(params)
+    Contract x = new Contract{salt: _salt, value: _value}(params)
+    
+    function deployHello2_New(string memory _greeting) public returns (address) {
+        address addr;
+        bytes32 salt = keccak256(abi.encodePacked(uint256(123)));
+        Hello2 hello = new Hello2{salt: salt, value: msg.value}(_greeting);        
+        addr = address(hello);
+        emit ContractDeployed("deployHello2_New", addr);
+        return addr;
+    }
 ```
 
 #### 使用底层assembly + CREATE2操作码 来部署合约，且目标合约没有构造函数参数。(详见：TestCreate2.sol)
