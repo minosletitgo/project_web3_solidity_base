@@ -55,8 +55,36 @@ Contract x = new Contract{value: _value}(params)
 ```
 
 #### 使用底层assembly + CREATE操作码 来部署合约，且目标合约没有构造函数参数。(详见：TestCreate.sol)
+```
+    function deployHello1_Create() public returns (address) {
+        address addr;
+        bytes memory bytecode = type(Hello1).creationCode; // 获取 Hello1 的 creationCode
+        assembly {
+            // 使用 create 指令来部署合约
+            addr := create(0, add(bytecode, 0x20), mload(bytecode))
+        }
+        require(addr != address(0), "Deployment failed");
+        emit ContractDeployed("deployHello1_Create", addr);
+        return addr;
+    }
+```
 
 #### 使用底层assembly + CREATE操作码 来部署合约，且目标合约有构造函数参数。(详见：TestCreate.sol)
+```
+    function deployHello2_Create(string memory _greeting) public returns (address) {
+        address addr;
+        bytes memory bytecode = type(Hello2).creationCode; // 获取 Hello2 的 creationCode
+        bytes memory constructorArgs = abi.encode(_greeting); // 将构造函数参数编码
+        bytes memory deploymentData = abi.encodePacked(bytecode, constructorArgs); // 拼接 bytecode 和参数
+        assembly {
+            // 使用 create 指令来部署合约
+            addr := create(0, add(deploymentData, 0x20), mload(deploymentData))
+        }
+        require(addr != address(0), "Deployment failed");
+        emit ContractDeployed("deployHello2_Create", addr);
+        return addr;
+    }
+```
 
 
 
