@@ -1,11 +1,13 @@
 
 合约名、库名、事件名、接口名、结构体名、枚举名(首字母大写)：
+```
 contract MyToken { }
 library MathLib { }
 event Transfer(address indexed from, address indexed to, uint256 value);
 interface IERC20 { }
 struct Token {string name; uint256 value;}
 enum Status { Active, Inactive }
+```
 
 
 函数名、变量名(首字母小写)：
