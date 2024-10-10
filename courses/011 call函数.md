@@ -7,9 +7,9 @@
 
 
 #### ```call()```函数的使用规则：
-- 目标合约地址.call(字节码);
-- 目标合约地址.call{value:发送数额, gas:gas数额}(字节码);
-- 字节码：abi.encodeWithSignature("函数签名", 逗号分隔的具体参数)
+- ```目标合约地址.call(字节码)```
+- ```目标合约地址.call{value:发送数额, gas:gas数额}(字节码)```
+- 字节码：```abi.encodeWithSignature("函数签名", 逗号分隔的具体参数)```
 - 调用的目标函数，它的可见性必须为 public或external
 
 
