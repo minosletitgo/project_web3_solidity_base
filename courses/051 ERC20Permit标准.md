@@ -209,3 +209,8 @@ abstract contract ERC20Permit is ERC20, IERC20Permit, EIP712, Nonces {
     }
 }
 ```
+
+　
+
+##### 其他说明：
+- nonce值：在链下时需要向合约交互一次，才能获取得到，但gas费用消耗非常少(因为是只读view)，这样才符合链下与链上的签名解析一致。
