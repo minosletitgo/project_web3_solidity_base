@@ -31,4 +31,4 @@
 - 它对应的操作是界面上：
 - 在 出售输入框内，我输入特定数量的ERC20值(即，我精准卖出的值)；
 - 在 购买输入框内，系统会自动计算出对应的ERC20值(即，我大概能够兑换得到的值)；
-- ![](../images/uniswap/swapExactTokensForTokens.png "") 
+- ![](../images/Uniswap/swapExactTokensForTokens.png "") 
