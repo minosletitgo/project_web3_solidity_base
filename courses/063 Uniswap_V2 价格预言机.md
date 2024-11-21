@@ -26,7 +26,6 @@
         emit Sync(reserve0, reserve1);
     }
 ```
-//- 小插曲：为什么```UniswapV2Pair.sol```的代码中，_update函数没有修饰器限制(如，管理员层能)
 
 　
 
