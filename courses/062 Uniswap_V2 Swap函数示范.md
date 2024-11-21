@@ -1,5 +1,5 @@
 #### 说明一下：
-- ```Uniswap v2-periphery```代表计算交易路径(即，简称路由)
+- ```Uniswap v2-periphery```代表计算交易路径(即，路由)
 - ```Uniswap```详细的满足了2种交易需求的用户：
 - 1. 想要确保卖出特定数量资产的人
 - 2. 希望确保买入特定数量资产的人
@@ -11,7 +11,7 @@
 
 　
 
-- 输入(或，出售)特定数量的ERC20代币，输出(或，买入)大概数量的ERC20代币：
+- 输入(出售)特定数量的ERC20代币，输出(买入)大概数量的ERC20代币：
 ```
     function swapExactTokensForTokens(
         uint amountIn,
