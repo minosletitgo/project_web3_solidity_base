@@ -55,7 +55,7 @@ import "https://github.com/Uniswap/v2-core/blob/master/contracts/interfaces/IUni
 import "https://github.com/Uniswap/v2-core/blob/master/contracts/interfaces/IUniswapV2Factory.sol";
 import "https://github.com/OpenZeppelin/openzeppelin-contracts/blob/v4.3.0/contracts/token/ERC20/IERC20.sol";
 
-contract FlashLoanArbitrage {
+contract FlashLoanArbitrage is IUniswapV2Callee{
     address private factory;
     address private tokenA;         //有套利空间的代币A，与代币B组成的交易池
     address private tokenB;         
@@ -85,7 +85,7 @@ contract FlashLoanArbitrage {
         uint256 amount0,
         uint256 amount1,
         bytes calldata data
-    ) external {
+    ) external override {
         require(msg.sender == IUniswapV2Factory(factory).getPair(tokenA, tokenB), "Unauthorized");
         require(sender == address(this), "Unauthorized");
 
