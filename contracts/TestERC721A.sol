@@ -1,7 +1,6 @@
 // SPDX-License-Identifier: MIT
 pragma solidity ^0.8.0;
 
-// ERC721A: A more gas efficient implementation of ERC721 for batch minting
 import "@openzeppelin/contracts/token/ERC721/IERC721Receiver.sol";
 import "@openzeppelin/contracts/utils/Address.sol";
 import "@openzeppelin/contracts/utils/Context.sol";
@@ -72,13 +71,20 @@ contract ERC721A is Context {
         require(quantity > 0, "ERC721A: quantity must be greater than zero");
 
         uint256 startTokenId = _currentIndex;
+
+        // Increase the balance of the recipient
         _balances[to] += quantity;
-        _owners[startTokenId] = to;
 
-        // Update the current index
+        // Iterate through the quantity to mint each token
+        for (uint256 i = 0; i < quantity; i++) {
+            uint256 tokenId = startTokenId + i;  // Calculate the tokenId for this iteration
+            _owners[tokenId] = to;  // Assign the ownership of this tokenId to the recipient
+
+            emit Transfer(address(0), to, tokenId);  // Emit the transfer event for minting
+        }
+
+        // Update the current index for the next mint
         _currentIndex += quantity;
-
-        emit Transfer(address(0), to, startTokenId);
     }
 
     // Batch mint function
