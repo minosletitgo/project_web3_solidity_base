@@ -6,9 +6,9 @@
 - !!!注意：delegatecall有安全隐患，使用时要保证当前合约和目标合约的状态变量存储结构相同，并且目标合约安全，不然会造成资产损失。
 - 适用：代理合约、钻石合约标准
 
-#### delegatecall()函数的使用规则：
+#### ```delegatecall()```函数的使用规则：
 - ```目标合约地址.delegatecall(字节码)```
-- delegatecall 只会传递函数调用的参数和数据，而不会涉及 ETH 的传递，以及gas费用。
+- ```delegatecall``` 只会传递函数调用的参数和数据，而不会涉及 ETH 的传递，以及gas费用。
 - 字节码：```abi.encodeWithSignature("函数签名", 逗号分隔的具体参数)```
 
 ##### 范例(contracts/TestDelegatecall.sol)：
