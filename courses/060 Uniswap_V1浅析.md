@@ -20,7 +20,7 @@
 - 2017年7月6日，Hayden Adams被西门子公司解雇，其朋友Karl Floersch劝说其关注以太坊，并学习智能合约的开发。
 - 2018年11月2日，Uniswap V1部署到以太坊主网。
 - 名字来源：由Vitalik提议，有独角兽单词(Unicorn)联想到。
-![](../images/uniswap_story.png "")
+![](../images/PixPin_20250418_162715.png "")
 
 　
 

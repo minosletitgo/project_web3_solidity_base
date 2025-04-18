@@ -34,45 +34,93 @@
     }
 ```
 
-#### 使用底层assembly + CREATE2操作码 来部署合约，且目标合约没有构造函数参数。(详见：TestCreate2.sol)
+#### 使用底层```assembly + CREATE2```操作码 来部署合约
 ```
-    function deployHello1_Create() public returns (address) {
+    function deployAddress(bytes32 salt) public returns (address, address) {
         address addr;
-        bytes memory bytecode = type(Hello1).creationCode; // 获取 Hello1 的 creationCode
-        bytes32 salt = keccak256(abi.encodePacked(uint256(123)));
+        bytes memory bytecode = type(ArgsZero).creationCode;
+        // 合约构造函数，参数为空
+        bytes memory payload = abi.encodePacked(bytecode);
         assembly {
-            // 使用 create2 指令来部署合约
-            addr := create2(0, add(bytecode, 0x20), mload(bytecode), salt)
+            addr := create2(0, add(payload, 0x20), mload(payload), salt)
+            if iszero(extcodesize(addr)) {
+                revert(0, 0)
+            }
         }
-        require(addr != address(0), "Deployment failed");
-        emit ContractDeployed("deployHello1_Create", addr);
-        return addr;
-        //0xb9254e278cf8431CB5fbd4BE03BD1135201bE725
+        emit Print_deployAddress(address(this), addr);
+        return (address(this), addr);
     }
-```    
+    
+    function deployAddress(bytes32 salt, uint256 value1) public returns (uint256, address, address) {
+        address addr;
+        bytes memory bytecode = type(ArgsOne).creationCode;
+        // 合约构造函数，参数为 1 个
+        bytes memory payload = abi.encodePacked(bytecode, abi.encode(value1));
+        assembly {
+            addr := create2(0, add(payload, 0x20), mload(payload), salt)
+            if iszero(extcodesize(addr)) {
+                revert(0, 0)
+            }
+        }
+        emit Print_deployAddress(value1, address(this), addr);
+        return (value1, address(this), addr);
+    }
+    
+    function deployAddress(bytes32 salt, uint256 value1, string memory value2) public returns (address, address) {
+        address addr;
+        bytes memory bytecode = type(ArgsTwo).creationCode;
+        // 合约构造函数，参数为 2 个
+        bytes memory payload = abi.encodePacked(bytecode, abi.encode(value1, value2));
+        assembly {
+            addr := create2(0, add(payload, 0x20), mload(payload), salt)
+            if iszero(extcodesize(addr)) {
+                revert(0, 0)
+            }
+        }
+        emit Print_deployAddress(address(this), addr);
+        return (address(this), addr);
+    }
+```
 
-#### 使用底层assembly + CREATE操作码 来部署合约，且目标合约有构造函数参数。(详见：TestCreate2.sol)
+#### 预测使用```CREATE2```操作码部署的合约地址
 ```
-    function deployHello2_Create(string memory _greeting)
-        public
-        returns (address)
-    {
-        address addr;
-        bytes memory bytecode = type(Hello2).creationCode; // 获取 Hello2 的 creationCode
-        bytes memory constructorArgs = abi.encode(_greeting); // 将构造函数参数编码
-        bytes memory deploymentData = abi.encodePacked(
-            bytecode,
-            constructorArgs
-        ); // 拼接 bytecode 和参数
-        bytes32 salt = keccak256(abi.encodePacked(uint256(123)));
-        assembly {
-            // 使用 create2 指令来部署合约
-            addr := create2(0, add(deploymentData, 0x20), mload(deploymentData), salt)
-        }
-        require(addr != address(0), "Deployment failed");
-        emit ContractDeployed("deployHello2_Create", addr);
-        return addr;
+    function getComputedAddress(bytes32 salt) public returns (address, address) {
+        bytes memory bytecode = type(ArgsZero).creationCode;
+        // 合约构造函数，参数为空
+        bytes memory payload = abi.encodePacked(bytecode);
+        bytes32 hash = keccak256(abi.encodePacked(bytes1(0xff), address(this), salt, keccak256(payload))
+        );
+
+        address addr = address(uint160(uint256(hash)));
+        emit Print_getComputeAddress(address(this), addr);
+        return (address(this), addr);
     }
+    
+    function getComputedAddress(bytes32 salt, uint256 value1) public returns (uint256, address, address) {
+        bytes memory bytecode = type(ArgsOne).creationCode;
+        // 合约构造函数，参数为 1 个
+        bytes memory payload = abi.encodePacked(bytecode, abi.encode(value1));
+        bytes32 hash = keccak256(
+            abi.encodePacked(bytes1(0xff), address(this), salt, keccak256(payload))
+        );
+
+        address addr = address(uint160(uint256(hash)));
+        emit Print_getComputeAddress(value1, address(this), addr);
+        return (value1, address(this), addr);
+    }    
+    
+    function getComputedAddress(bytes32 salt, uint256 value1, string memory value2) public returns (address, address) {
+        bytes memory bytecode = type(ArgsOne).creationCode;
+        // 合约构造函数，参数为 2 个
+        bytes memory payload = abi.encodePacked(bytecode, abi.encode(value1, value2));
+        bytes32 hash = keccak256(
+            abi.encodePacked(bytes1(0xff), address(this), salt, keccak256(payload))
+        );
+
+        address addr = address(uint160(uint256(hash)));
+        emit Print_getComputeAddress(address(this), addr);
+        return (address(this), addr);
+    }    
 ```
 
 
@@ -101,5 +149,14 @@
 - 0xff：常量字节
 - creator_address：部署者的地址(这个地址有可能指向的是一个合约，如工厂合约)
 - salt：私有算法支持的盐值
+
+#### 其他
+- 一般情况下，使用```CREATE2```操作码部署合约，与预测合约地址，都需要在同一个上层合约中（如，Uniswap的工厂合约）
+- 在```Foundry```的```script```模拟环境，可能无法完全预测一致的地址，因为不是标准的链上合约。
+
+#### 其他测试用例
+- ```project_web3_solidity_base\contracts\ArgsZero```
+- ```project_web3_solidity_base\contracts\ArgsOne```
+- ```project_web3_solidity_base\contracts\ArgsTwo```
 
 
