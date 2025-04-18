@@ -153,10 +153,6 @@
 #### 其他
 - 一般情况下，使用```CREATE2```操作码部署合约，与预测合约地址，都需要在同一个上层合约中（如，Uniswap的工厂合约）
 - 在```Foundry```的```script```模拟环境，可能无法完全预测一致的地址，因为不是标准的链上合约。
-
-#### 其他测试用例
-- ```project_web3_solidity_base\contracts\ArgsZero```
-- ```project_web3_solidity_base\contracts\ArgsOne```
-- ```project_web3_solidity_base\contracts\ArgsTwo```
+- 用例```project_web3_solidity_base\contracts\Create2```
 
 
