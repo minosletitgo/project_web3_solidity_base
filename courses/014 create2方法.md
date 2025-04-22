@@ -156,4 +156,30 @@
 - 用例```project_web3_solidity_base\contracts\Create2```
 - 如果，部署者的环境数据都相同，重复使用相同参数，进行```CREATE```部署合约会失败，因为合约已存在。
 
+#### ```Openzepplin```的实现
+```
+    https://github.com/OpenZeppelin/openzeppelin-contracts/contracts/proxy/Clones.sol
+    
+    function cloneDeterministic(
+        address implementation,
+        bytes32 salt,
+        uint256 value
+    ) internal returns (address instance) {
+        if (address(this).balance < value) {
+            revert Errors.InsufficientBalance(address(this).balance, value);
+        }
+        assembly ("memory-safe") {
+            // Cleans the upper 96 bits of the `implementation` word, then packs the first 3 bytes
+            // of the `implementation` address with the bytecode before the address.
+            mstore(0x00, or(shr(0xe8, shl(0x60, implementation)), 0x3d602d80600a3d3981f3363d3d373d3d3d363d73000000))
+            // Packs the remaining 17 bytes of `implementation` with the bytecode after the address.
+            mstore(0x20, or(shl(0x78, implementation), 0x5af43d82803e903d91602b57fd5bf3))
+            instance := create2(value, 0x09, 0x37, salt)
+        }
+        if (instance == address(0)) {
+            revert Errors.FailedDeployment();
+        }
+    }
+```
+
 

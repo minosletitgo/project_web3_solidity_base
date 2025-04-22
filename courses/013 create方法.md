@@ -136,3 +136,25 @@
 - 通常情况下不认定```CREATE```操作码，具备预测地址的特性的(因为```nonce```值，即使在js中，也难以预测!)
 - 面试题：在代码环境都不变的情况下，普通合约连续部署多次，合约地址都不相同。
 - 回答：默认情况下。部署合约使用的是```CREATE```方式，```nonce```值势必在递增。（例外，```Hardhat 或 anvil 等```本地节点会重置数据，故重置后部署地址会相同。）
+
+#### ```Openzepplin```的实现
+```
+    https://github.com/OpenZeppelin/openzeppelin-contracts/contracts/proxy/Clones.sol
+    
+    function clone(address implementation, uint256 value) internal returns (address instance) {
+        if (address(this).balance < value) {
+            revert Errors.InsufficientBalance(address(this).balance, value);
+        }
+        assembly ("memory-safe") {
+            // Cleans the upper 96 bits of the `implementation` word, then packs the first 3 bytes
+            // of the `implementation` address with the bytecode before the address.
+            mstore(0x00, or(shr(0xe8, shl(0x60, implementation)), 0x3d602d80600a3d3981f3363d3d373d3d3d363d73000000))
+            // Packs the remaining 17 bytes of `implementation` with the bytecode after the address.
+            mstore(0x20, or(shl(0x78, implementation), 0x5af43d82803e903d91602b57fd5bf3))
+            instance := create(value, 0x09, 0x37)
+        }
+        if (instance == address(0)) {
+            revert Errors.FailedDeployment();
+        }
+    }
+```
