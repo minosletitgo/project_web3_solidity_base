@@ -1,7 +1,7 @@
 ### 理解
 - ```staticcall``` 是一种低级别的调用方式，用于执行只读操作。
 - 它类似于```call```，但有一个重要的限制：```staticcall```不允许修改合约状态。
-- 这意味着目标函数最好是标记为 ```pure``` 或 ```view``` 的函数。
+- 这意味着目标函数最好是标记为 ```pure``` 或 ```view``` 的函数（粗暴看作是"```get```函数"）。
 - 如果被调用的函数尝试修改状态（例如写入存储变量），交易将回滚。```Error: VM Exception while processing transaction: revert```
 
 ### 示例
