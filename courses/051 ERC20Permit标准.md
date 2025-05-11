@@ -307,4 +307,17 @@ abstract contract ERC20Permit is ERC20, IERC20Permit, EIP712, Nonces {
 ##### 其他说明：
 - ```permit```函数机制的存在，不仅保证了用户授权额度(即使交给第三方合约来执行)的安全性，还通过 ```gasless``` 操作提升了用户体验。
 - ```nonce```值：在链下时需要向合约交互一次，才能获取得到(gas费用几乎为0，因为是只读view)，这样才符合链下与链上的签名解析一致。
+
+##### 从小白码代码的层面，粗暴看```permit```逻辑
+```
+    // 如果 permit 函数，被阉割成下面的形式。
+    // 那么，上一层第三方合约，将可以胡乱随意的操控用户的授权额度。
+    function permit(
+        address owner,
+        address spender,
+        uint256 value
+    ) public virtual {
+        _approve(owner, spender, value);
+    }
+```
  
