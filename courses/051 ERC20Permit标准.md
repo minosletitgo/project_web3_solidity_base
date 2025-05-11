@@ -130,6 +130,97 @@ contract ThirdPartyContract {
 }
 ```
 
+##### 使用```Foundry```的脚本模块，模拟链下生成```r、s、v```
+- 合约名称，略有出入。
+```
+    function testPermitAndSpend() public {
+        // 准备 permit 数据
+        address spenderAddress = address(spender);
+        uint256 amount = 100 * 1e18; // 尝试授权 100 个
+        assertGe(
+            token.balanceOf(owner),
+            amount,
+            "balanceOf Owner Is Not Enough !"
+        );
+
+        console.log("owner balanceOf = ", token.balanceOf(owner) / 1e18);
+        console.log(
+            "spender balanceOf = ",
+            token.balanceOf(address(spender)) / 1e18
+        );
+
+        uint256 deadline = block.timestamp + 1 hours;
+        uint256 nonce = token.nonces(owner);
+
+        // 构造 EIP-712 消息
+        bytes32 permitTypehash = keccak256(
+            "Permit(address owner,address spender,uint256 value,uint256 nonce,uint256 deadline)"
+        );
+        bytes32 structHash = keccak256(
+            abi.encode(
+                permitTypehash,
+                owner,
+                spenderAddress,
+                amount,
+                nonce,
+                deadline
+            )
+        );
+
+        console.log("step ...........1");
+
+        // 获取 DOMAIN_SEPARATOR
+        bytes32 domainSeparator = token.DOMAIN_SEPARATOR();
+        bytes32 digest = keccak256(
+            abi.encodePacked("\x19\x01", domainSeparator, structHash)
+        );
+
+        console.log("step ...........2");
+
+        // 链下签名
+        (uint8 v, bytes32 r, bytes32 s) = vm.sign(ownerPrivateKey, digest);
+
+        console.log("step ...........3");
+
+        // 验证签名
+        address recoveredSigner = ECDSA.recover(digest, v, r, s);
+        assertEq(recoveredSigner, owner, "Invalid signature");
+
+        console.log("step ...........4");
+
+        // 调用 SpenderContract 的 spendWithPermit
+        vm.prank(address(this)); // 模拟第三方调用
+        spender.spendWithPermit(
+            owner,
+            spenderAddress,
+            amount,
+            deadline,
+            v,
+            r,
+            s
+        );
+
+        console.log("step ...........5");
+
+        // 验证授权和转移
+        assertEq(
+            token.allowance(owner, spenderAddress),
+            0,
+            "Allowance should be consumed"
+        );
+
+        console.log("owner balanceOf = ", token.balanceOf(owner) / 1e18);
+        console.log(
+            "spender balanceOf = ",
+            token.balanceOf(address(spender)) / 1e18
+        );
+
+        vm.stopPrank();
+
+        console.log("step ...........6");
+    }
+```
+
 　
 
 ##### 以下贴出OpenZepplin所维护的```IERC20Permit.sol```与```ERC20Permit.sol```
