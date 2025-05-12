@@ -1,8 +1,7 @@
 #### EIP-712 被提出的原因
 
 EIP-712 是以太坊一种结构化签名的方式。用户用私钥对一个未经过“结构化”的消息进行签名，是一串十六进制字节码，这种消息很难让签名人看懂，体验不好，而且会被一些作恶的应用或网站利用（例如让用户签一个操作把 token 授权给某个地址，然后资产就被盗取，而用户难以在签名时意识到）。例如下面这种签名，只能看懂地址和转账信息，但是 `Message` 中的字节码无法被人类读懂。
-
-![eth_signData](https://eips.ethereum.org/assets/eip-712/eth_sign.png)
+![](../images/eth_sign.png "")
 
 EIP-712 就是解决这种看不懂的情况，同时也提升用户体验，把消息结构化出来，告诉签名人要签的消息有哪些内容。
 
@@ -59,14 +58,13 @@ EIP-712 结构化签名包含 3 个部分：
   ```
 
 通过 Ethers.js 库可将这 3 个部分组装并通过浏览器中注入的钱包对象来让用户签名。用户即可在前端页面中看到例如如下面的签名界面：
-
-![eth_signTypedData](https://github.com/GarenWoo/0124_MinimalProxy-ERC20Permit-ERC721Permit/raw/main/Task2_ERC2612AndERC721Permit/images/IMG2_SignMessage_ERC20Permit.png)
+![](../images/IMG2_SignMessage_ERC20Permit.png "")
 
 #### 使用 EIP-712 进行离线签名的示例代码
 
 对于某个实现了 ERC2612（或 ERC20Permit，即合约中包含了验签方法）的 token，用户采用离线签名对某个地址进行授权一定的额度 `Value`，允许其作为 `Spender` 使用此用户的 token 。
 
-点击访问[前端代码](https://github.com/GarenWoo/0119-0122_NFTMarketDapp/blob/main/src/App.tsx#L369-L435)，关键点解释如下：
+点击访问[前端js代码](https://github.com/GarenWoo/0119-0122_NFTMarketDapp/blob/main/src/App.tsx#L369-L435)，关键点解释如下：
 
 ```javascript
 // 379 行：获取浏览器注入的钱包对象 `provider`
