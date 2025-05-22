@@ -1,6 +1,7 @@
 ### ```EigenLayer```业务流程简短描述(先睹为快)
 - 用户在 ```EigenLayer``` 上质押 ```LSD``` 资产。
-- 质押的资产提供给```AVS```进行安全保护。
+- 主动选择（或由协议自动分配）一个```Operator```（节点运营商）。
+- 由```Operator```代理质押者参与```AVS```验证，普通用户不直接运行节点。
 - ```AVS```为应用链提供网络节点验证服务。
 - 应用链（```如 Layer 2 Rollups，例如 Arbitrum Orbit、Optimism 的 OP Stack、Mantle Network 等```）支付服务费，分为三部分，
   - 分别作为"质押奖励"、"服务收入" 和 "协议收入" 。
