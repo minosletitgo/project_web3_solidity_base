@@ -74,9 +74,9 @@
 - ```Multiplier_low```：低利用率时的利率敏感系数（如 10%）。
 - ```Multiplier_high```：高利用率时的加速系数（如 50%）。
 - 当 ```UtilizationRate ≤ Kink``` 时，代表"资金利用率过低"，"借款利率"会自动降低（鼓励"借款"），"存款利率"也会自动降低（抑制"存款"）。
-- $BorrowRate(借款利率) = BaseRate + UtilizationRate × Multiplierlow$
+  - $BorrowRate(借款利率) = BaseRate + UtilizationRate × Multiplierlow$
 - 当 ```UtilizationRate > Kink``` 时，利率跳跃式上升，代表"资金利用率过高"，"借款利率"会自动升高（抑制"借款"），"存款利率"也会自动升高（鼓励"存款"）。
-- $BorrowRate(借款利率) = BaseRate + Kink × Multiplier_low + (UtilizationRate - Kink) × Multiplierhigh$
+  - $BorrowRate(借款利率) = BaseRate + Kink × Multiplier_low + (UtilizationRate - Kink) × Multiplierhigh$
 - 代码：```contracts/JumpRateModel.sol```
 ```
     function getBorrowRate(uint cash, uint borrows, uint reserves) public view returns (uint) {
